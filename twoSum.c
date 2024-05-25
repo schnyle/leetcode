@@ -36,7 +36,7 @@ typedef struct
  * Note: The returned array must be malloced, assume caller calls free().
  */
 // two pass solution
-int *twoSum(int *nums, int numsSize, int target, int *returnSize)
+int *twoSumOld(int *nums, int numsSize, int target, int *returnSize)
 {
   HashMapItem *hashMap = (HashMapItem *)malloc(numsSize * sizeof(HashMapItem));
   int *result = (int *)malloc(2 * sizeof(int));
@@ -71,13 +71,46 @@ int *twoSum(int *nums, int numsSize, int target, int *returnSize)
   return NULL;
 }
 
+// one pass solution
+int *twoSum(int *nums, int numsSize, int target, int *returnSize)
+{
+  HashMapItem *hashMap = (HashMapItem *)malloc(numsSize * sizeof(HashMapItem));
+  int *result = (int *)malloc(2 * sizeof(int));
+
+  for (int i = 0; i < numsSize; i++)
+  {
+    int complement = target - nums[i];
+    for (int j = 0; j < i; j++)
+    {
+      if (hashMap[j].value == nums[i])
+      {
+        result[0] = hashMap[j].index;
+        result[1] = i;
+        *returnSize = 2;
+        return result;
+      }
+    }
+
+    hashMap[i].index = i;
+    hashMap[i].value = complement;
+  }
+
+  free(hashMap);
+
+  return NULL;
+}
+
 int main()
 {
   int nums[] = {3, 2, 4};
   int numsSize = 3;
+  int target = 6;
+  // int nums[] = {2, 7, 11, 15};
+  // int numsSize = 4;
+  // int target = 9;
   int returnSize = 0;
 
-  int *result = twoSum(nums, numsSize, 6, &returnSize);
+  int *result = twoSum(nums, numsSize, target, &returnSize);
 
   if (result != NULL)
   {
