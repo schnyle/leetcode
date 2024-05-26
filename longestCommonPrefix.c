@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 // Write a function to find the longest common prefix string amongst an array of strings.
 // If there is no common prefix, return an empty string "".
 // Example 1:
@@ -11,6 +7,10 @@
 // Input: strs = ["dog","racecar","car"]
 // Output: ""
 // Explanation: There is no common prefix among the input strings.
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 char *longestCommonPrefix(char **strs, int strsSize)
 {
