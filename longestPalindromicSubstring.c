@@ -16,88 +16,51 @@
 
 char *longestPalindrome(char *s)
 {
-  int sLength = strlen(s);
+  int sLen = strlen(s);
 
-  if (sLength == 1)
+  int start = 0;
+  int maxLen = 1;
+
+  void getLongestPalindromeAtIndex(int left, int right)
   {
-    return s;
-  }
-
-  char *result = malloc((sLength + 1) * sizeof(char));
-  int resultLength = 0;
-
-  for (int i = 0; i < sLength; i++)
-  {
-    int left = i - 1;
-    int right = i + 1;
-    char *substring = malloc(sLength * sizeof(char));
-    memset(substring, ' ', sLength * sizeof(char));
-
-    // odd palindrome
-    substring[i] = s[i];
-    int substringLength = 1;
-
-    // even palidrome
-    if (right < sLength && s[i] == s[right])
+    while (left >= 0 && right < sLen && s[left] == s[right])
     {
-      substring[right] = s[right];
-      substringLength++;
-      right++;
-    }
-
-    while (left >= 0 && right < sLength)
-    {
-      char sLeft = s[left];
-      char sRight = s[right];
-
-      if (sLeft == sRight)
-      {
-        substring[left] = s[left];
-        substring[right] = s[right];
-        substringLength += 2;
-      }
-      else
-      {
-        break;
-      }
-
       left--;
       right++;
     }
 
-    if (substringLength > resultLength)
+    int len = right - left - 1;
+    if (len > maxLen)
     {
-      resultLength = substringLength;
-      memcpy(result, substring, (resultLength + 1) * sizeof(char));
-      result[sLength - 1] = '\0';
+      maxLen = len;
+      start = left + 1;
     }
-
-    free(substring);
   }
 
-  // trim result
-  char *ans = malloc((resultLength + 1) * sizeof(char));
-  int ansIndex = 0;
-  for (int i = 0; i < sLength; i++)
+  for (int i = 0; i < sLen; i++)
   {
-    char c = result[i];
-    if (c != ' ')
+    getLongestPalindromeAtIndex(i, i);
+    if (i < sLen - 1 && s[i] == s[i + 1])
     {
-      ans[ansIndex] = c;
-      ansIndex++;
+      getLongestPalindromeAtIndex(i, i + 1);
     }
   }
-  ans[resultLength] = '\0';
 
-  return ans;
+  char *result = malloc((maxLen + 1) * sizeof(char));
+  strncpy(result, s + start, maxLen);
+  result[maxLen] = '\0';
+
+  return result;
 }
 
 int main()
 {
-  char *s = "bbb";
+  char *s = "rrr";
   char *res = longestPalindrome(s);
 
   int n = strlen(res);
+
+  printf("res: %s\n", res);
 
   printf("res: ");
   for (int i = 0; i < n; i++)
