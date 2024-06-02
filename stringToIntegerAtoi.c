@@ -60,90 +60,45 @@
 #include <string.h>
 #include <math.h>
 #include <limits.h>
-
-#define ASCII_MAX_DIGIT 57
-#define ASCII_MIN_DIGIT 48
-#define ASCII_SPACE 32
-#define ASCII_ZERO 48
-#define ASCII_PLUS 43
-#define ASCII_MINUS 45
+#include <ctype.h>
 
 int myAtoi(char *s)
 {
-  int sLength = strlen(s);
-  int isReading = 0;
-  int isLeadingZero = 1;
-  int sign = 1;
+  while (*s == ' ')
+    s++;
 
-  int resArr[10] = {-1};
-  int resIdx = 0;
-  for (int i = 0; i < 10; i++)
+  int sign = (*s == '-' ? -1 : 1);
+  if (*s == '-' || *s == '+')
+    s++;
+
+  while (*s == '0')
+    s++;
+
+  if (!isdigit(*s))
+    return 0;
+
+  int digits[200];
+  int i = 0;
+  while (isdigit(*s))
   {
-    resArr[i] = -1;
-  }
-
-  printf("\n%s\n", s);
-  for (int i = 0; i < sLength; i++)
-  {
-    char c = s[i];
-
-    if (!isReading && (c == ASCII_SPACE))
-    {
-      continue;
-    }
-
-    if (!isReading && (c == ASCII_PLUS || c == ASCII_MINUS))
-    {
-      isReading = 1;
-      sign = (int)c == ASCII_MINUS ? -1 : 1;
-      continue;
-    }
-
-    if (ASCII_MIN_DIGIT <= c && c <= ASCII_MAX_DIGIT)
-    {
-      if (resIdx > 9)
-      {
-        if (sign == 1)
-        {
-          return INT_MAX;
-        }
-        else
-        {
-          return INT_MIN;
-        }
-      }
-
-      if (c == ASCII_ZERO && isLeadingZero) {
-        isReading = 1;
-        continue;
-      }
-      isLeadingZero = 0;
-
-      if (!isReading)
-      {
-        isReading = 1;
-      }
-
-      resArr[resIdx++] = c - '0';
-      continue;
-    }
-    else
-    {
-      break;
-    }
+    digits[i] = *s - '0';
+    s++;
+    i++;
   }
 
   int res = 0;
-  for (int i = 0; i < resIdx; i++)
+  for (int j = 0; j < i; j++)
   {
-    res += sign * resArr[i] * pow(10, resIdx - i - 1);
-  }
-  if (res < 0 && sign == 1)
-  {
-    res = INT_MAX;
+    res += digits[j] * pow(10, i - j - 1);
+
+    // overflow
+    if (res < 0)
+    {
+      return sign == 1 ? INT_MAX : INT_MIN;
+    }
   }
 
-  return res;
+  return res * sign;
 }
 
 int main()
