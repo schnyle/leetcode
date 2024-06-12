@@ -78,6 +78,23 @@ void sortColorsTwoPass(int *nums, int numsSize)
 }
 
 // one pass
+void sortColors(int *nums, int numsSize)
+{
+  int count[3] = {0};
+
+  int i;
+  for (i = 0; i < numsSize; i++)
+  {
+    count[nums[i]]++;
+  }
+
+  int idx = 0;
+  for (i = 0; i < 3; i++)
+  {
+    while(count[i]-- > 0)
+      nums[idx++] = i;
+  }
+}
 
 int main()
 {
