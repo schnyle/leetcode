@@ -22,7 +22,7 @@ void swap(int *px, int *py)
 }
 
 // bubble sort
-void sortColors(int *nums, int numsSize)
+void sortColorsBubble(int *nums, int numsSize)
 {
   int i, j;
   for (i = 0; i < numsSize - 1; i++)
@@ -34,6 +34,50 @@ void sortColors(int *nums, int numsSize)
     }
   }
 }
+
+// two pass
+void sortColorsTwoPass(int *nums, int numsSize)
+{
+  struct data {
+    int zeros;
+    int ones;
+    int twos;
+  };
+
+  struct data D;
+  D.zeros = 0;
+  D.ones = 0;
+  D.twos = 0;
+
+  int i;
+  for (i = 0; i < numsSize; i++)
+  {
+    switch (nums[i])
+    {
+    case 0:
+      D.zeros++;
+      break;
+    case 1:
+      D.ones++;
+      break;
+    case 2:
+      D.twos++;
+      break;
+    }
+  }
+
+  for (i = 0; i < numsSize; i++)
+  {
+    if (D.zeros-- > 0)
+      nums[i] = 0;
+    else if (D.ones-- > 0)
+      nums[i] = 1;
+    else if (D.twos-- > 0)
+      nums[i] = 2;
+  }
+}
+
+// one pass
 
 int main()
 {
