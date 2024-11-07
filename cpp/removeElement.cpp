@@ -17,8 +17,8 @@ class Solution {
 };
 
 int main() {
-  std::vector<int> nums{3, 2, 2, 3};
   int val{3};
+  std::vector<int> nums{3, 2, 2, 3};
 
   Solution sol;
   auto res = sol.removeElement(nums, val);
